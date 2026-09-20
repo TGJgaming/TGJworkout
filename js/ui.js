@@ -200,7 +200,7 @@ function createExerciseCard(pattern) {
   const leftHeader = document.createElement('div');
   leftHeader.innerHTML = `
     <div class="pattern-name">${patternLabel}</div>
-    <div class="exercise-name">${exerciseData.exercise}</div>
+    <a href="${exerciseData.videoUrl}" target="_blank" rel="noopener noreferrer" class="exercise-name" style="text-decoration: underline; color: inherit;">${exerciseData.exercise}</a>
   `;
 
   const levelSelector = createLevelSelector(pattern, levelIndex);
@@ -235,32 +235,11 @@ function createCardBody(pattern, exerciseData) {
   const body = document.createElement('div');
   body.className = 'card-body';
 
-  // Cue & Video
-  const cueContainer = document.createElement('div');
-  cueContainer.style.marginBottom = 'var(--spacing-md)';
-
+  // Cue
   const cue = document.createElement('p');
   cue.className = 'exercise-cue';
-  cue.style.marginBottom = '4px';
   cue.textContent = exerciseData.cue;
-  cueContainer.appendChild(cue);
-
-  if (exerciseData.videoUrl) {
-    const videoLink = document.createElement('a');
-    videoLink.href = exerciseData.videoUrl;
-    videoLink.target = '_blank';
-    videoLink.rel = 'noopener noreferrer';
-    videoLink.style.display = 'inline-flex';
-    videoLink.style.alignItems = 'center';
-    videoLink.style.fontSize = 'var(--font-size-sm)';
-    videoLink.style.color = 'var(--in-progress)';
-    videoLink.style.textDecoration = 'none';
-    videoLink.style.fontWeight = '600';
-    videoLink.innerHTML = '📺 Watch Demo';
-    cueContainer.appendChild(videoLink);
-  }
-
-  body.appendChild(cueContainer);
+  body.appendChild(cue);
 
   // Prescription
   const prescription = document.createElement('div');
@@ -602,13 +581,10 @@ function renderHIITSession() {
       ${isRunning ? hiitState.phase.toUpperCase() : 'READY'}
     </div>
     <div class="hiit-exercise-name" id="hiit-exercise-name">
-      ${HIIT_EXERCISES[0].name}
+      <a href="${HIIT_EXERCISES[0].videoUrl}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">${HIIT_EXERCISES[0].name}</a>
     </div>
     <div class="hiit-exercise-cue" id="hiit-exercise-cue">
       ${HIIT_EXERCISES[0].cue}
-    </div>
-    <div id="hiit-video-link-container" style="margin-bottom: var(--spacing-md);">
-      <a id="hiit-video-link" href="${HIIT_EXERCISES[0].videoUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; font-size: var(--font-size-sm); color: var(--in-progress); text-decoration: none; font-weight: 600;">📺 Watch Demo</a>
     </div>
     <div class="hiit-timer" id="hiit-timer-display">
       ${formatTime(HIIT_CONFIG.workSeconds)}
@@ -666,10 +642,8 @@ function onHIITPhaseChange(phase, round, exerciseIndex) {
   }
 
   if (phase === 'work' && HIIT_EXERCISES[exerciseIndex]) {
-    if (name) name.textContent = HIIT_EXERCISES[exerciseIndex].name;
+    if (name) name.innerHTML = `<a href="${HIIT_EXERCISES[exerciseIndex].videoUrl}" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">${HIIT_EXERCISES[exerciseIndex].name}</a>`;
     if (cue) cue.textContent = HIIT_EXERCISES[exerciseIndex].cue;
-    const videoLink = document.getElementById('hiit-video-link');
-    if (videoLink) videoLink.href = HIIT_EXERCISES[exerciseIndex].videoUrl;
   }
 }
 
