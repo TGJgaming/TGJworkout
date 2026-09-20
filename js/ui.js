@@ -235,11 +235,32 @@ function createCardBody(pattern, exerciseData) {
   const body = document.createElement('div');
   body.className = 'card-body';
 
-  // Cue
+  // Cue & Video
+  const cueContainer = document.createElement('div');
+  cueContainer.style.marginBottom = 'var(--spacing-md)';
+
   const cue = document.createElement('p');
   cue.className = 'exercise-cue';
+  cue.style.marginBottom = '4px';
   cue.textContent = exerciseData.cue;
-  body.appendChild(cue);
+  cueContainer.appendChild(cue);
+
+  if (exerciseData.videoUrl) {
+    const videoLink = document.createElement('a');
+    videoLink.href = exerciseData.videoUrl;
+    videoLink.target = '_blank';
+    videoLink.rel = 'noopener noreferrer';
+    videoLink.style.display = 'inline-flex';
+    videoLink.style.alignItems = 'center';
+    videoLink.style.fontSize = 'var(--font-size-sm)';
+    videoLink.style.color = 'var(--in-progress)';
+    videoLink.style.textDecoration = 'none';
+    videoLink.style.fontWeight = '600';
+    videoLink.innerHTML = '📺 Watch Demo';
+    cueContainer.appendChild(videoLink);
+  }
+
+  body.appendChild(cueContainer);
 
   // Prescription
   const prescription = document.createElement('div');
@@ -586,6 +607,9 @@ function renderHIITSession() {
     <div class="hiit-exercise-cue" id="hiit-exercise-cue">
       ${HIIT_EXERCISES[0].cue}
     </div>
+    <div id="hiit-video-link-container" style="margin-bottom: var(--spacing-md);">
+      <a id="hiit-video-link" href="${HIIT_EXERCISES[0].videoUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; font-size: var(--font-size-sm); color: var(--in-progress); text-decoration: none; font-weight: 600;">📺 Watch Demo</a>
+    </div>
     <div class="hiit-timer" id="hiit-timer-display">
       ${formatTime(HIIT_CONFIG.workSeconds)}
     </div>
@@ -644,6 +668,8 @@ function onHIITPhaseChange(phase, round, exerciseIndex) {
   if (phase === 'work' && HIIT_EXERCISES[exerciseIndex]) {
     if (name) name.textContent = HIIT_EXERCISES[exerciseIndex].name;
     if (cue) cue.textContent = HIIT_EXERCISES[exerciseIndex].cue;
+    const videoLink = document.getElementById('hiit-video-link');
+    if (videoLink) videoLink.href = HIIT_EXERCISES[exerciseIndex].videoUrl;
   }
 }
 
